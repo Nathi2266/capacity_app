@@ -1,3 +1,4 @@
+import { Slot } from '@radix-ui/react-slot'
 import { cn } from '../../lib/utils'
 
 const variants = {
@@ -12,9 +13,10 @@ const sizes = {
   icon: 'h-10 w-10 p-0',
 }
 
-export function Button({ className = '', variant = 'default', size = 'default', ...props }) {
+export function Button({ className = '', variant = 'default', size = 'default', asChild = false, ...props }) {
+  const Comp = asChild ? Slot : 'button'
   return (
-    <button
+    <Comp
       className={cn(
         'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:pointer-events-none disabled:opacity-50',
         variants[variant] || variants.default,

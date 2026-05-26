@@ -246,6 +246,3 @@ function EmployeeForm({ open, onClose, onSave, employee }) {
 
 export default EmployeeForm
 export { EmployeeForm }
-export function EmployeeForm() {
-  return <div className="card">Employee form dialog placeholder</div>
-}

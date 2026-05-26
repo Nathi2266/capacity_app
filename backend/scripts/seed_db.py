@@ -12,10 +12,10 @@ from app.seed import seed_demo_data
 def main():
     db = SessionLocal()
     try:
-      seed_demo_data(db)
-      print("Database seeded")
+        seed_demo_data(db)
+        print("Database seeded")
     finally:
-      db.close()
+        db.close()
 
 
 if __name__ == "__main__":

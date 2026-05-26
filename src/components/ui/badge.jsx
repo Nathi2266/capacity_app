@@ -1,5 +1,7 @@
 function getVariantClass(variant) {
   switch (variant) {
+    case 'outline':
+      return 'badge--outline'
     case 'secondary':
       return 'badge--secondary'
     case 'success':

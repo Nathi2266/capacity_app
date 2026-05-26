@@ -106,3 +106,34 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.5);
 }
+
+.badge--outline {
+  background: transparent;
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+}
+
+.badge--secondary {
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.badge--success {
+  background: hsl(var(--success) / 0.12);
+  color: hsl(var(--success));
+}
+
+.badge--warning {
+  background: hsl(var(--warning) / 0.18);
+  color: hsl(var(--warning));
+}
+
+.badge--destructive {
+  background: hsl(var(--destructive) / 0.12);
+  color: hsl(var(--destructive));
+}
+
+.badge--primary {
+  background: hsl(var(--primary) / 0.12);
+  color: hsl(var(--primary));
+}

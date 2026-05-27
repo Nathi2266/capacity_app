@@ -1,3 +1,5 @@
+"""FastAPI application setup for the capacity app backend."""
+
 import logging
 
 from fastapi import FastAPI
@@ -50,10 +52,12 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("startup")
 def on_startup() -> None:
+    """Create database tables when the API starts up."""
     try:
         Base.metadata.create_all(bind=engine)
-    except SQLAlchemyError:
-        logger.exception(
+    except SQLAlchemyError as exc:
+        logger.warning(
             "Database is unavailable during startup; skipping schema "
-            "creation so the API can still boot."
+            "creation so the API can still boot: %s",
+            exc,
         )

@@ -104,7 +104,21 @@ export function AuthProvider({ children }) {
       login,
       register,
     }),
-    [user, isAuthenticated, isLoadingAuth, isLoadingPublicSettings, authError, appPublicSettings, authChecked],
+    [
+      user,
+      isAuthenticated,
+      isLoadingAuth,
+      isLoadingPublicSettings,
+      authError,
+      appPublicSettings,
+      authChecked,
+      logout,
+      navigateToLogin,
+      checkUserAuth,
+      checkAppState,
+      login,
+      register,
+    ],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

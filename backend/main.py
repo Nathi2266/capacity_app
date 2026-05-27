@@ -11,3 +11,7 @@ if __name__ == "__main__":
         port=settings.api_port,
         reload=True,
     )
+#Use this demo login:
+
+#Email: admin@example.com
+#Password: Admin123!

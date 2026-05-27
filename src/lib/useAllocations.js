@@ -1,27 +1,42 @@
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import { APP_SETTINGS_KEYS, useStoredValue } from '@/lib/appSettings';
+
+function getRefreshInterval(intervalMinutes) {
+  const parsed = Number(intervalMinutes)
+  if (!parsed || parsed <= 0) {
+    return false
+  }
+  return parsed * 60 * 1000
+}
 
 export function useAllocations() {
+  const [autoRefreshInterval] = useStoredValue(APP_SETTINGS_KEYS.autoRefreshInterval, '15')
   return useQuery({
     queryKey: ['allocations'],
     queryFn: () => base44.entities.Allocation.filter({ status: 'Active' }),
     initialData: [],
+    refetchInterval: getRefreshInterval(autoRefreshInterval),
   });
 }
 
 export function useEmployees() {
+  const [autoRefreshInterval] = useStoredValue(APP_SETTINGS_KEYS.autoRefreshInterval, '15')
   return useQuery({
     queryKey: ['employees'],
     queryFn: () => base44.entities.Employee.list(),
     initialData: [],
+    refetchInterval: getRefreshInterval(autoRefreshInterval),
   });
 }
 
 export function useProjects() {
+  const [autoRefreshInterval] = useStoredValue(APP_SETTINGS_KEYS.autoRefreshInterval, '15')
   return useQuery({
     queryKey: ['projects'],
     queryFn: () => base44.entities.Project.list(),
     initialData: [],
+    refetchInterval: getRefreshInterval(autoRefreshInterval),
   });
 }
 

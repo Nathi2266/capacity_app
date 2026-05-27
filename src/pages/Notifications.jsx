@@ -8,6 +8,7 @@ import { Bell, AlertTriangle, Info, CheckCircle, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
+import { APP_SETTINGS_KEYS, useStoredValue } from '@/lib/appSettings';
 
 const typeIcons = {
   overallocation: AlertTriangle,
@@ -27,9 +28,10 @@ const severityColors = {
 
 export default function Notifications() {
   const queryClient = useQueryClient();
+  const [notificationSortOrder] = useStoredValue(APP_SETTINGS_KEYS.notificationSortOrder, '-created_date')
   const { data: notifications = [] } = useQuery({
-    queryKey: ['notifications'],
-    queryFn: () => base44.entities.Notification.list('-created_date'),
+    queryKey: ['notifications', notificationSortOrder],
+    queryFn: () => base44.entities.Notification.list(notificationSortOrder),
     initialData: [],
   });
 

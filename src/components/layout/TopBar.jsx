@@ -6,9 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Link } from 'react-router-dom';
+import { APP_SETTINGS_KEYS, applyTheme, useBooleanSetting, useStoredValue } from '@/lib/appSettings';
 
 export default function TopBar() {
-  const [darkMode, setDarkMode] = React.useState(false);
+  const [theme, setTheme] = useStoredValue(APP_SETTINGS_KEYS.theme, 'light');
+  const [showNotificationBadge] = useBooleanSetting(
+    APP_SETTINGS_KEYS.showNotificationBadge,
+    true,
+  );
 
   const { data: notifications = [] } = useQuery({
     queryKey: ['unread-notifications'],
@@ -16,9 +21,14 @@ export default function TopBar() {
     initialData: [],
   });
 
+  React.useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
+
   const toggleDark = () => {
-    setDarkMode(!darkMode);
-    document.documentElement.classList.toggle('dark');
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    applyTheme(nextTheme);
   };
 
   return (
@@ -34,12 +44,12 @@ export default function TopBar() {
       </div>
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon" onClick={toggleDark} className="rounded-full">
-          {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </Button>
         <Link to="/notifications">
           <Button variant="ghost" size="icon" className="rounded-full relative">
             <Bell className="w-4 h-4" />
-            {notifications.length > 0 && (
+            {showNotificationBadge && notifications.length > 0 && (
               <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] bg-destructive">
                 {notifications.length}
               </Badge>

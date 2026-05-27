@@ -14,6 +14,7 @@ import { Plus, Trash2, AlertTriangle, Sparkles } from 'lucide-react';
 import UtilizationBadge from '@/components/shared/UtilizationBadge';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { APP_SETTINGS_KEYS, useBooleanSetting, useOptionalStoredValue } from '@/lib/appSettings';
 
 export default function Allocations() {
   const { data: employees } = useEmployees();
@@ -21,7 +22,12 @@ export default function Allocations() {
   const { data: allocations } = useAllocations();
   const queryClient = useQueryClient();
   const [formOpen, setFormOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState('');
+  const [persistFilters] = useBooleanSetting(APP_SETTINGS_KEYS.persistFilters, true);
+  const [selectedProject, setSelectedProject] = useOptionalStoredValue(
+    'capacity_app_allocations_selected_project',
+    '',
+    persistFilters,
+  );
   const [form, setForm] = useState({ employee_id: '', project_id: '', allocation_pct: 20, role_on_project: '', start_date: '', end_date: '' });
   const [showRecommendations, setShowRecommendations] = useState(false);
 

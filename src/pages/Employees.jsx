@@ -14,6 +14,7 @@ import { StatusBadge } from '@/components/shared/StatusBadge';
 import EmployeeForm from '@/components/employees/EmployeeForm';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { APP_SETTINGS_KEYS, useBooleanSetting, useOptionalStoredValue } from '@/lib/appSettings';
 
 const DEPARTMENTS = ['All', 'Frontend Engineering', 'Backend Engineering', 'Full Stack Engineering', 'QA', 'DevOps', 'UX/UI', 'Product Management', 'Data Engineering', 'AI/ML', 'Security'];
 
@@ -21,8 +22,9 @@ export default function Employees() {
   const { data: employees } = useEmployees();
   const { data: allocations } = useAllocations();
   const queryClient = useQueryClient();
-  const [search, setSearch] = useState('');
-  const [deptFilter, setDeptFilter] = useState('All');
+  const [persistFilters] = useBooleanSetting(APP_SETTINGS_KEYS.persistFilters, true);
+  const [search, setSearch] = useOptionalStoredValue('capacity_app_employees_search', '', persistFilters);
+  const [deptFilter, setDeptFilter] = useOptionalStoredValue('capacity_app_employees_department', 'All', persistFilters);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
 

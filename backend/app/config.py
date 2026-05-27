@@ -1,30 +1,43 @@
 from functools import lru_cache
+from pathlib import Path
 
-from pydantic import Field, field_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+BACKEND_DIR = Path(__file__).resolve().parent.parent
 
-    database_url: str = "postgresql://postgres:postgres@localhost:5432/capacity_app"
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=BACKEND_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    database_url: str = (
+        "postgresql://postgres:postgres@localhost:5432/capacity_app"
+    )
     jwt_secret: str = "change-me"
     jwt_expires_minutes: int = 60 * 24
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
+    demo_user_id: str = "00000000-0000-0000-0000-000000000001"
+    demo_user_email: str = "admin@example.com"
+    demo_user_password: str = "Admin123!"
+    demo_user_full_name: str = "Demo Admin"
+    demo_user_role: str = "Admin"
+    cors_origins_raw: str = Field(
+        default="http://localhost:5173,http://127.0.0.1:5173,http://[::1]:5173"
+    )
     api_host: str = "0.0.0.0"
     api_port: int = 8000
 
-    @field_validator("cors_origins", mode="before")
-    @classmethod
-    def parse_cors_origins(cls, value):
-        if isinstance(value, list):
-            return value
-        if not value:
-            return ["http://localhost:5173"]
-        if isinstance(value, str):
-            return [origin.strip() for origin in value.split(",") if origin.strip()]
-        return value
-
+    @property
+    def cors_origins(self) -> list[str]:
+        return [
+            origin.strip()
+            for origin in self.cors_origins_raw.split(",")
+            if origin.strip()
+        ]
 
 
 @lru_cache

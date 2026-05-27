@@ -7,6 +7,7 @@ import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { useAuth } from "@/lib/AuthContext";
+import { APP_SETTINGS_KEYS, useStoredValue } from '@/lib/appSettings';
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const [defaultLandingPage] = useStoredValue(APP_SETTINGS_KEYS.defaultLandingPage, '/');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +23,7 @@ export default function Login() {
     setLoading(true);
     try {
       await login(email, password);
-      window.location.href = "/";
+      window.location.href = defaultLandingPage || "/";
     } catch (err) {
       setError(err.message || "Invalid email or password");
     } finally {

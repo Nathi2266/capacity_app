@@ -6,6 +6,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import AppPreferencesSync from '@/components/layout/AppPreferencesSync';
 
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
@@ -21,6 +22,8 @@ import Capacity from '@/pages/Capacity';
 import SkillsHeatmap from '@/pages/SkillsHeatmap';
 import Analytics from '@/pages/Analytics';
 import Notifications from '@/pages/Notifications';
+import Settings from '@/pages/Settings';
+import Profile from '@/pages/Profile';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -62,6 +65,8 @@ const AuthenticatedApp = () => {
           <Route path="/heatmap" element={<SkillsHeatmap />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>
 
@@ -74,6 +79,7 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
+        <AppPreferencesSync />
         <Router>
           <AuthenticatedApp />
         </Router>

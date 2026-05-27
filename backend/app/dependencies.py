@@ -5,6 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError  # type: ignore[import-untyped]
 from sqlalchemy.orm import Session
 
+from .config import settings
 from .database import get_db
 from .models.user import User
 from .security import decode_token
@@ -28,6 +29,15 @@ def get_current_user(
         token_type = payload.get("type")
         if not subject or token_type != "access":
             raise credentials_exception
+        if subject == settings.demo_user_id:
+            return User(
+                id=settings.demo_user_id,
+                email=settings.demo_user_email,
+                full_name=settings.demo_user_full_name,
+                password_hash="demo-password-hash",
+                role=settings.demo_user_role,
+                is_verified=True,
+            )
     except JWTError as exc:
         raise credentials_exception from exc
 

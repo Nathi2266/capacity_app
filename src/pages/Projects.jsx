@@ -13,6 +13,7 @@ import ProjectForm from '@/components/projects/ProjectForm';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
+import { APP_SETTINGS_KEYS, useBooleanSetting, useOptionalStoredValue } from '@/lib/appSettings';
 
 const STATUS_OPTIONS = ['All', 'Planning', 'Active', 'On Hold', 'Completed', 'Cancelled'];
 
@@ -20,8 +21,9 @@ export default function Projects() {
   const { data: projects } = useProjects();
   const { data: allocations } = useAllocations();
   const queryClient = useQueryClient();
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
+  const [persistFilters] = useBooleanSetting(APP_SETTINGS_KEYS.persistFilters, true);
+  const [search, setSearch] = useOptionalStoredValue('capacity_app_projects_search', '', persistFilters);
+  const [statusFilter, setStatusFilter] = useOptionalStoredValue('capacity_app_projects_status', 'All', persistFilters);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
 
